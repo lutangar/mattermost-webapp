@@ -7,6 +7,8 @@ import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {Client4} from 'mattermost-redux/client';
 
+import {Groups} from 'mattermost-redux/constants';
+
 import Constants from 'utils/constants.jsx';
 import {displayEntireNameForUser, localizeMessage} from 'utils/utils.jsx';
 
@@ -14,7 +16,6 @@ import MultiSelect from 'components/multiselect/multiselect.jsx';
 import ProfilePicture from 'components/profile_picture.jsx';
 import AddIcon from 'components/icon/add_icon';
 
-import {Groups} from 'mattermost-redux/constants';
 
 const USERS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 20;
@@ -24,15 +25,13 @@ export default class AddGroupsToTeamModal extends React.Component {
         currentTeamName: PropTypes.string.isRequired,
         currentTeamId: PropTypes.string.isRequired,
         searchTerm: PropTypes.string.isRequired,
-        users: PropTypes.array.isRequired,
+        groups: PropTypes.array.isRequired,
         onHide: PropTypes.func,
         actions: PropTypes.shape({
             getGroupsNotAssociatedToTeam: PropTypes.func.isRequired,
             setModalSearchTerm: PropTypes.func.isRequired,
-            searchGroups: PropTypes.func.isRequired,
             linkGroupSyncable: PropTypes.func.isRequired,
-
-            // loadStatusesForProfilesList: PropTypes.func.isRequired,
+            getAllGroupsAssociatedToTeam: PropTypes.func.isRequired,
         }).isRequired,
     }
 
@@ -52,7 +51,10 @@ export default class AddGroupsToTeamModal extends React.Component {
     }
 
     componentDidMount() {
-        this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, 0, USERS_PER_PAGE * 2).then(() => {
+        Promise.all([
+            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, null, 0, USERS_PER_PAGE * 2),
+            this.props.actions.getAllGroupsAssociatedToTeam(this.props.currentTeamId),
+        ]).then(() => {
             this.setGroupsLoadingState(false);
         });
     }
@@ -66,10 +68,12 @@ export default class AddGroupsToTeamModal extends React.Component {
                 return;
             }
 
+            console.log("searchTerm: ", searchTerm);
+
             this.searchTimeoutId = setTimeout(
                 async () => {
                     this.setGroupsLoadingState(true);
-                    const {data} = await this.props.actions.searchGroups(searchTerm, {not_in_team_id: this.props.currentTeamId});
+                    const {data} = await this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, searchTerm);
                     if (data) {
                         // this.props.actions.loadStatusesForProfilesList(data);
                     }
@@ -214,9 +218,9 @@ export default class AddGroupsToTeamModal extends React.Component {
         const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
         const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
 
-        let users = [];
-        if (this.props.users) {
-            users = this.props.users.filter((user) => user.delete_at === 0);
+        let groups = [];
+        if (this.props.groups) {
+            groups = this.props.groups.filter((user) => user.delete_at === 0);
         }
 
         let addError = null;
@@ -249,7 +253,7 @@ export default class AddGroupsToTeamModal extends React.Component {
                     {addError}
                     <MultiSelect
                         key='addGroupsToTeamKey'
-                        options={users}
+                        options={groups}
                         optionRenderer={this.renderOption}
                         values={this.state.values}
                         valueRenderer={this.renderValue}

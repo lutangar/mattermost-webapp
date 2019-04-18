@@ -3,12 +3,9 @@
 
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getGroupsNotAssociatedToTeam, searchGroups} from 'mattermost-redux/actions/groups';
+import {getGroupsNotAssociatedToTeam, linkGroupSyncable, getAllGroupsAssociatedToTeam} from 'mattermost-redux/actions/groups';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {searchProfilesNotInCurrentTeam, getProfilesNotInCurrentTeam} from 'mattermost-redux/selectors/entities/users';
 
-// import {loadStatusesForProfilesList} from 'actions/status_actions.jsx';
-import {linkGroupSyncable} from 'mattermost-redux/actions/groups';
 import {setModalSearchTerm} from 'actions/views/search';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -19,21 +16,22 @@ import AddGroupsToTeamModal from './add_groups_to_team_modal';
 function mapStateToProps(state) {
     const searchTerm = state.views.search.modalSearch;
 
-    let users;
+    const team = getCurrentTeam(state) || {};
+
+    let groups = [];
     if (searchTerm) {
-        users = searchProfilesNotInCurrentTeam(state, searchTerm, true);
+        // selector
     } else {
-        users = getProfilesNotInCurrentTeam(state);
+        // selector
     }
 
-    const team = getCurrentTeam(state) || {};
     const modalId = ModalIdentifiers.ADD_USER_TO_TEAM;
 
     return {
         currentTeamName: team.display_name,
         currentTeamId: team.id,
         searchTerm,
-        users,
+        groups,
         show: isModalOpen(state, modalId),
     };
 }
@@ -43,10 +41,8 @@ function mapDispatchToProps(dispatch) {
         actions: bindActionCreators({
             getGroupsNotAssociatedToTeam,
             setModalSearchTerm,
-            searchGroups,
             linkGroupSyncable,
-
-            // loadStatusesForProfilesList,
+            getAllGroupsAssociatedToTeam,
         }, dispatch),
     };
 }
