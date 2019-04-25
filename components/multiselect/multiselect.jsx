@@ -36,6 +36,7 @@ export default class MultiSelect extends React.Component {
         submitImmediatelyOn: PropTypes.func,
         saving: PropTypes.bool,
         loading: PropTypes.bool,
+        placeholderText: PropTypes.string,
     }
 
     constructor(props) {
@@ -316,7 +317,7 @@ export default class MultiSelect extends React.Component {
                             onKeyDown={this.onInputKeyDown}
                             onChange={this.onChange}
                             value={this.props.values}
-                            placeholder={localizeMessage('multiselect.placeholder', 'Search and add members')}
+                            placeholder={this.props.placeholderText}
                             inputValue={this.state.input}
                             getOptionValue={(option) => option.id}
                         />
