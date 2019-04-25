@@ -4,6 +4,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {getGroupsNotAssociatedToTeam, linkGroupSyncable, getAllGroupsAssociatedToTeam} from 'mattermost-redux/actions/groups';
+import {getGroupsNotAssociatedToTeam as selectGroupsNotAssociatedToTeam} from 'mattermost-redux/selectors/entities/groups';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setModalSearchTerm} from 'actions/views/search';
@@ -18,11 +19,10 @@ function mapStateToProps(state) {
 
     const team = getCurrentTeam(state) || {};
 
-    let groups = [];
+    let groups = selectGroupsNotAssociatedToTeam(state, team.id);
     if (searchTerm) {
-        // selector
-    } else {
-        // selector
+        var regex = RegExp(searchTerm, 'i');
+        groups = groups.filter((group) => regex.test(group.display_name) || regex.test(group.name));
     }
 
     const modalId = ModalIdentifiers.ADD_USER_TO_TEAM;

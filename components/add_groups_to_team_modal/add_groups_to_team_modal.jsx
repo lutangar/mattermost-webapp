@@ -16,7 +16,6 @@ import MultiSelect from 'components/multiselect/multiselect.jsx';
 import ProfilePicture from 'components/profile_picture.jsx';
 import AddIcon from 'components/icon/add_icon';
 
-
 const USERS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 20;
 
@@ -52,7 +51,7 @@ export default class AddGroupsToTeamModal extends React.Component {
 
     componentDidMount() {
         Promise.all([
-            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, null, 0, USERS_PER_PAGE * 2),
+            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, '', 0, USERS_PER_PAGE * 2),
             this.props.actions.getAllGroupsAssociatedToTeam(this.props.currentTeamId),
         ]).then(() => {
             this.setGroupsLoadingState(false);
@@ -67,8 +66,6 @@ export default class AddGroupsToTeamModal extends React.Component {
             if (searchTerm === '') {
                 return;
             }
-
-            console.log("searchTerm: ", searchTerm);
 
             this.searchTimeoutId = setTimeout(
                 async () => {
@@ -125,7 +122,7 @@ export default class AddGroupsToTeamModal extends React.Component {
             if (!error) {
                 this.handleHide();
             }
-        })
+        });
     }
 
     addValue = (value) => {
@@ -147,7 +144,7 @@ export default class AddGroupsToTeamModal extends React.Component {
     handlePageChange = (page, prevPage) => {
         if (page > prevPage) {
             this.setGroupsLoadingState(true);
-            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, page + 1, USERS_PER_PAGE).then(() => {
+            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, this.props.searchTerm, page + 1, USERS_PER_PAGE).then(() => {
                 this.setGroupsLoadingState(false);
             });
         }
@@ -174,8 +171,10 @@ export default class AddGroupsToTeamModal extends React.Component {
                 className={'more-modal__row clickable ' + rowSelected}
                 onClick={() => onAdd(option)}
             >
-                <ProfilePicture
-                    src={Client4.getProfilePictureUrl(option.id, option.last_picture_update)}
+                <img
+                    className='more-modal__image'
+                    src='https://secure.gravatar.com/avatar/3f8ce2d7d6c402b141668f1f07a18e95?s=35&d=mm&r=g'
+                    alt='group picture'
                     width='32'
                     height='32'
                 />
@@ -183,10 +182,7 @@ export default class AddGroupsToTeamModal extends React.Component {
                     className='more-modal__details'
                 >
                     <div className='more-modal__name'>
-                        {displayEntireNameForUser(option)}
-                    </div>
-                    <div className='more-modal__description'>
-                        {option.email}
+                        {option.display_name} - <span>0 Members</span>
                     </div>
                 </div>
                 <div className='more-modal__actions'>
@@ -199,7 +195,7 @@ export default class AddGroupsToTeamModal extends React.Component {
     }
 
     renderValue(props) {
-        return props.data.username;
+        return props.data.display_name;
     }
 
     render() {
