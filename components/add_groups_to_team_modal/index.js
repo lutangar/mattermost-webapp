@@ -25,7 +25,7 @@ function mapStateToProps(state) {
         groups = groups.filter((group) => regex.test(group.display_name) || regex.test(group.name));
     }
 
-    const modalId = ModalIdentifiers.ADD_USER_TO_TEAM;
+    const modalId = ModalIdentifiers.ADD_GROUPS_TO_TEAM;
 
     return {
         currentTeamName: team.display_name,

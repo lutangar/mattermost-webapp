@@ -5,9 +5,9 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {shallow} from 'enzyme';
 
-import AddUsersToTeam from 'components/add_users_to_team/add_users_to_team.jsx';
+import AddGroupsToTeamModal from 'components/add_groups_to_team_modal/add_groups_to_team_modal.jsx';
 
-describe('components/AddUsersToTeam', () => {
+describe('components/AddGroupsToTeamModal', () => {
     const baseActions = {
         getProfilesNotInTeam: jest.fn().mockResolvedValue({data: true}),
         setModalSearchTerm: jest.fn().mockResolvedValue({data: true}),
@@ -29,7 +29,7 @@ describe('components/AddUsersToTeam', () => {
         const actions = {...baseActions, getProfilesNotInTeam};
         const props = {...baseProps, actions};
         const wrapper = shallow(
-            <AddUsersToTeam {...props}/>
+            <AddGroupsToTeamModal {...props}/>
         );
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find(Modal).exists()).toBe(true);
@@ -39,7 +39,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match state when onHide is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         wrapper.setState({show: true});
@@ -51,7 +51,7 @@ describe('components/AddUsersToTeam', () => {
         const onHide = jest.fn();
         const props = {...baseProps, onHide};
         const wrapper = shallow(
-            <AddUsersToTeam {...props}/>
+            <AddGroupsToTeamModal {...props}/>
         );
 
         wrapper.instance().handleExit();
@@ -60,7 +60,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match state when handleResponse is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         wrapper.setState({saving: true, addError: ''});
@@ -82,7 +82,7 @@ describe('components/AddUsersToTeam', () => {
         const actions = {...baseProps.actions, addUsersToTeam};
         const props = {...baseProps, actions};
         const wrapper = shallow(
-            <AddUsersToTeam {...props}/>
+            <AddGroupsToTeamModal {...props}/>
         );
         const instance = wrapper.instance();
         instance.handleResponse = jest.fn();
@@ -115,7 +115,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match state when addValue is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         wrapper.setState({values: [{id: 'id_1'}]});
@@ -132,7 +132,7 @@ describe('components/AddUsersToTeam', () => {
         const actions = {...baseActions, getProfilesNotInTeam};
         const props = {...baseProps, actions};
         const wrapper = shallow(
-            <AddUsersToTeam {...props}/>
+            <AddGroupsToTeamModal {...props}/>
         );
 
         wrapper.setState({users: [{id: 'id_1'}]});
@@ -151,7 +151,7 @@ describe('components/AddUsersToTeam', () => {
         const actions = {...baseActions, setModalSearchTerm};
         const props = {...baseProps, actions};
         const wrapper = shallow(
-            <AddUsersToTeam {...props}/>
+            <AddGroupsToTeamModal {...props}/>
         );
 
         wrapper.instance().search('');
@@ -167,7 +167,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match state when handleDelete is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         wrapper.setState({values: [{id: 'id_1'}]});
@@ -178,7 +178,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match when renderOption is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         const option = {id: 'id', last_picture_update: '12345', email: 'test@test.com'};
@@ -193,7 +193,7 @@ describe('components/AddUsersToTeam', () => {
 
     test('should match when renderValue is called', () => {
         const wrapper = shallow(
-            <AddUsersToTeam {...baseProps}/>
+            <AddGroupsToTeamModal {...baseProps}/>
         );
 
         expect(wrapper.instance().renderValue({data: {username: 'username'}})).toEqual('username');
