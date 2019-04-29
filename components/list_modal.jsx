@@ -42,12 +42,12 @@ export default class ListModal extends React.PureComponent {
     }
 
     rangeCountTranslation() {
-        const startCount = (this.state.page * this.numPerPage) + 1;
+        let startCount = (this.state.page * this.numPerPage) + 1;
         const endCount = (startCount + this.state.items.length) - 1;
-        const total = this.state.totalCount;
-        if (this.state.items.length === 0) {
-            return '';
+        if (endCount === 0) {
+            startCount = 0;
         }
+        const total = this.state.totalCount;
         if (this.props.rangeCountTranslation) {
             return this.props.rangeCountTranslation(startCount, endCount, total);
         }
