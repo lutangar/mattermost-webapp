@@ -37,6 +37,7 @@ export default class ListModal extends React.PureComponent {
             items: [],
             totalCount: 0,
             loading: true,
+            searchTerm: '',
         };
     }
 
@@ -100,7 +101,7 @@ export default class ListModal extends React.PureComponent {
     }
 
     triggerOnPageChange = async () => {
-        const {items} = await this.props.onPageChange(this.setState.page);
+        const {items} = await this.props.onPageChange(this.setState.page, this.state.searchTerm);
         this.setState({items});
     }
 
@@ -120,8 +121,9 @@ export default class ListModal extends React.PureComponent {
 
     onSearchInput = async (event) => {
         const {target} = event;
-        this.setState({loading: true});
-        const result = await this.props.onSearchInput(target.value);
+        const searchTerm = target.value;
+        this.setState({loading: true, searchTerm});
+        const result = await this.props.onSearchInput(searchTerm);
         const {items, totalCount} = result;
         this.setState({loading: false, items, totalCount});
     }
