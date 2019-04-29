@@ -9,9 +9,6 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setModalSearchTerm} from 'actions/views/search';
 
-import {ModalIdentifiers} from 'utils/constants';
-import {isModalOpen} from 'selectors/views/modals';
-
 import AddGroupsToTeamModal from './add_groups_to_team_modal';
 
 function mapStateToProps(state) {
@@ -25,14 +22,11 @@ function mapStateToProps(state) {
         groups = groups.filter((group) => regex.test(group.display_name) || regex.test(group.name));
     }
 
-    const modalId = ModalIdentifiers.ADD_GROUPS_TO_TEAM;
-
     return {
         currentTeamName: team.display_name,
         currentTeamId: team.id,
         searchTerm,
         groups,
-        show: isModalOpen(state, modalId),
     };
 }
 

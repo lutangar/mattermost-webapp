@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Permissions} from 'mattermost-redux/constants';
 
-import ListModal from 'components/list_modal';
 import * as GlobalActions from 'actions/global_actions.jsx';
 import {Constants, ModalIdentifiers} from 'utils/constants.jsx';
 import {cmdOrCtrlPressed, isKeyPressed, localizeMessage} from 'utils/utils';
@@ -32,6 +31,7 @@ import MenuItemAction from 'components/widgets/menu/menu_items/menu_item_action.
 import MenuItemExternalLink from 'components/widgets/menu/menu_items/menu_item_external_link.jsx';
 import MenuItemLink from 'components/widgets/menu/menu_items/menu_item_link.jsx';
 import MenuItemToggleModalRedux from 'components/widgets/menu/menu_items/menu_item_toggle_modal_redux.jsx';
+import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 
 export default class MainMenu extends React.PureComponent {
     static propTypes = {
@@ -248,43 +248,9 @@ export default class MainMenu extends React.PureComponent {
                             show={teamIsGroupConstrained}
                             modalId={ModalIdentifiers.MANAGE_TEAM_GROUPS}
                             dialogProps={{
-                                titleText: `${this.props.teamName} Groups`,
-                                searchPlaceholderText: 'Search groups',
-                                initialItems: () => {
-                                    return [
-                                        {id: 'xh585kyz3tn55q6ipfo57btwnc',
-                                            display_name: 'abc',
-                                            member_count: 0},
-                                        {id: 'emdwu98u6jg9xfn9p5zu48bojo',
-                                            display_name: 'xyz',
-                                            member_count: 2},
-                                    ];
-                                },
-                                renderRow: (item) => {
-                                    return (
-                                        <React.Fragment key={item.id}>
-                                            <img
-                                                className='more-modal__image'
-                                                src='/static/files/73209f482a967f9379602dc6253cf768.png'
-                                                alt='group picture'
-                                                width='32'
-                                                height='32'
-                                            />
-                                            <div className='more-modal__details'>
-                                                <div className='more-modal__name'>{item.display_name} - <span><span>{item.member_count} members</span></span></div>
-                                            </div>
-                                            <div className='more-modal__actions'>
-                                                <button
-                                                    id='removeMember'
-                                                    type='button'
-                                                    className='btn btn-danger btn-message'
-                                                ><span>Remove Member</span></button>
-                                            </div>
-                                        </React.Fragment>
-                                    );
-                                },
+                                teamID: this.props.teamId,
                             }}
-                            dialogType={ListModal}
+                            dialogType={TeamGroupsManageModal}
                             text={localizeMessage('navbar_dropdown.manageGroups', 'Manage Groups')}
                             icon={this.props.mobile && <i className='fa fa-user-plus'/>}
                         />
