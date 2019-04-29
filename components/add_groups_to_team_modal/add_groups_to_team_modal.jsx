@@ -69,10 +69,7 @@ export default class AddGroupsToTeamModal extends React.Component {
             this.searchTimeoutId = setTimeout(
                 async () => {
                     this.setGroupsLoadingState(true);
-                    const {data} = await this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, searchTerm);
-                    if (data) {
-                        // this.props.actions.loadStatusesForProfilesList(data);
-                    }
+                    await this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, searchTerm);
                     this.setGroupsLoadingState(false);
                 },
                 Constants.SEARCH_TIMEOUT_MILLISECONDS
