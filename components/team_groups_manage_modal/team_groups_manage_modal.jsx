@@ -32,7 +32,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                         totalCount: data.totalGroupCount,
                     };
                 }}
-                renderRow={(item) => {
+                renderRow={(item, triggerOnPageChange) => {
                     return (
                         <React.Fragment key={item.id}>
                             <img
@@ -58,7 +58,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                                     id='removeMember'
                                     type='button'
                                     className='btn btn-danger btn-message'
-                                    onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM) && this.setState()}
+                                    onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(() => triggerOnPageChange())}
                                 >
                                     <FormattedMessage
                                         id='group_list_modal.removeGroupButton'
@@ -70,13 +70,11 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                     );
                 }}
                 onPageChange={async (pageNumber, searchTerm) => {
-                    let items;
-                    if (pageNumber === 0) {
-                        items = [{id: 'xh585kyz3tn55q6ipfo57btwnc', display_name: 'abc', member_count: 0}, {id: 'emdwu98u6jg9xfn9p5zu48bojo', display_name: 'xyz', member_count: 2}];
-                    } else {
-                        items = [{id: 'foo1', display_name: 'foo', member_count: 0}, {id: 'bar1', display_name: 'bar', member_count: 2}];
-                    }
-                    return Promise.resolve(items);
+                    const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, pageNumber, DEFAULT_NUM_PER_PAGE);
+                    return {
+                        items: data.groups,
+                        totalCount: data.totalGroupCount,
+                    };
                 }}
                 itemKey='id'
                 onSearchInput={async (searchTerm) => {

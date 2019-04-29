@@ -44,6 +44,9 @@ export default class ListModal extends React.PureComponent {
         const startCount = (this.state.page * this.numPerPage) + 1;
         const endCount = (startCount + this.state.items.length) - 1;
         const total = this.state.totalCount;
+        if (this.state.items.length === 0) {
+            return '';
+        }
         if (this.props.rangeCountTranslation) {
             return this.props.rangeCountTranslation(startCount, endCount, total);
         }
@@ -91,9 +94,14 @@ export default class ListModal extends React.PureComponent {
                 key={item[this.props.itemKey]}
                 className='more-modal__row'
             >
-                {this.props.renderRow(item)}
+                {this.props.renderRow(item, this.triggerOnPageChange)}
             </div>
         ));
+    }
+
+    triggerOnPageChange = async () => {
+        const {items} = await this.props.onPageChange(this.setState.page);
+        this.setState({items});
     }
 
     onNext = async () => {
