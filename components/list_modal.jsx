@@ -22,7 +22,6 @@ export default class ListModal extends React.PureComponent {
         onPageChange: PropTypes.func,
         numPerPage: PropTypes.number,
         rangeCountTranslation: PropTypes.func,
-        itemKey: PropTypes.string,
         onSearchInput: PropTypes.func,
     }
 
@@ -91,12 +90,7 @@ export default class ListModal extends React.PureComponent {
             );
         }
         return this.state.items.map((item) => (
-            <div
-                key={item[this.props.itemKey]}
-                className='more-modal__row'
-            >
-                {this.props.renderRow(item, this)}
-            </div>
+            this.props.renderRow(item, this)
         ));
     }
 

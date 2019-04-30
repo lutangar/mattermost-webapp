@@ -31,7 +31,10 @@ export default class TeamGroupsManageModal extends React.PureComponent {
 
     renderRow = (item, component) => {
         return (
-            <React.Fragment key={item.id}>
+            <div
+                key={item.id}
+                className='more-modal__row'
+            >
                 <img
                     className='more-modal__image'
                     src='/static/files/73209f482a967f9379602dc6253cf768.png'
@@ -67,7 +70,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                         />
                     </button>
                 </div>
-            </React.Fragment>
+            </div>
         );
     };
 
@@ -99,7 +102,6 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                 initialItems={this.initialItems}
                 renderRow={this.renderRow}
                 onPageChange={this.onPageChange}
-                itemKey='id'
                 onSearchInput={this.onSearchInput}
                 onHide={this.onHide}
             />
