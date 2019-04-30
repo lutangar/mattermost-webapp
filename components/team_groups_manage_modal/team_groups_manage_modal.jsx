@@ -65,7 +65,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                     height='32'
                 />
                 <div className='more-modal__details'>
-                    <div className='more-modal__name'>{item.display_name} - <span>
+                    <div className='more-modal__name'>{item.display_name} {'-'} <span>
                         <FormattedMessage
                             id='numMembers'
                             defaultMessage='{num, number} {num, plural, one {member} other {members}}'

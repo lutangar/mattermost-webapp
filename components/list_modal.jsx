@@ -118,7 +118,7 @@ export default class ListModal extends React.PureComponent {
         );
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
         const {totalCount, items} = await this.props.loadItems(0, '');
         this.setState({totalCount, items, loading: false});
     }

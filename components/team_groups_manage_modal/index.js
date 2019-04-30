@@ -11,7 +11,7 @@ import TeamGroupsManageModal from './team_groups_manage_modal';
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        team: state.entities.teams.teams[ownProps.teamID]
+        team: state.entities.teams.teams[ownProps.teamID],
     };
 };
 
