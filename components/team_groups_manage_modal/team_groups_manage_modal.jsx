@@ -29,7 +29,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         };
     };
 
-    renderRow = (item, component) => {
+    renderRow = (item, listModal) => {
         return (
             <div
                 key={item.id}
@@ -59,9 +59,9 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                         type='button'
                         className='btn btn-danger btn-message'
                         onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(async () => {
-                            component.setState({loading: true});
-                            const {items} = await component.props.onPageChange(component.setState.page, component.state.searchTerm);
-                            component.setState({loading: false, items});
+                            listModal.setState({loading: true});
+                            const {items} = await listModal.props.onPageChange(listModal.setState.page, listModal.state.searchTerm);
+                            listModal.setState({loading: false, items});
                         })}
                     >
                         <FormattedMessage
