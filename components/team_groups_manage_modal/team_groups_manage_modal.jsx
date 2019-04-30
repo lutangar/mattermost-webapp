@@ -32,7 +32,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                         totalCount: data.totalGroupCount,
                     };
                 }}
-                renderRow={(item, triggerOnPageChange) => {
+                renderRow={(item, component) => {
                     return (
                         <React.Fragment key={item.id}>
                             <img
@@ -58,7 +58,11 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                                     id='removeMember'
                                     type='button'
                                     className='btn btn-danger btn-message'
-                                    onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(() => triggerOnPageChange())}
+                                    onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(async () => {
+                                        component.setState({loading: true});
+                                        const {items} = await component.props.onPageChange(component.setState.page, component.state.searchTerm);
+                                        component.setState({loading: false, items});
+                                    })}
                                 >
                                     <FormattedMessage
                                         id='group_list_modal.removeGroupButton'

@@ -95,15 +95,9 @@ export default class ListModal extends React.PureComponent {
                 key={item[this.props.itemKey]}
                 className='more-modal__row'
             >
-                {this.props.renderRow(item, this.triggerOnPageChange)}
+                {this.props.renderRow(item, this)}
             </div>
         ));
-    }
-
-    triggerOnPageChange = async () => {
-        this.setState({loading: true});
-        const {items} = await this.props.onPageChange(this.setState.page, this.state.searchTerm);
-        this.setState({items, loading: false});
     }
 
     onNext = async () => {
