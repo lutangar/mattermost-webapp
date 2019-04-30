@@ -21,8 +21,8 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         }).isRequired,
     };
 
-    initialItems = async () => {
-        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, '', 0, DEFAULT_NUM_PER_PAGE);
+    loadItems = async (pageNumber, searchTerm) => {
+        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, pageNumber, DEFAULT_NUM_PER_PAGE);
         return {
             items: data.groups,
             totalCount: data.totalGroupCount,
@@ -31,9 +31,21 @@ export default class TeamGroupsManageModal extends React.PureComponent {
 
     onClickRemoveGroup = (item, listModal) => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(async () => {
         listModal.setState({loading: true});
-        const {items} = await listModal.props.onPageChange(listModal.setState.page, listModal.state.searchTerm);
+        const {items} = await listModal.props.loadItems(listModal.setState.page, listModal.state.searchTerm);
         listModal.setState({loading: false, items});
-    })
+    });
+
+    onSearchInput = async (searchTerm) => {
+        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, 0, DEFAULT_NUM_PER_PAGE);
+        return {
+            items: data.groups,
+            totalCount: data.totalGroupCount,
+        };
+    };
+
+    onHide = () => {
+        this.props.actions.closeModal(ModalIdentifiers.MANAGE_TEAM_GROUPS);
+    };
 
     renderRow = (item, listModal) => {
         return (
@@ -76,34 +88,13 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         );
     };
 
-    onPageChange = async (pageNumber, searchTerm) => {
-        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, pageNumber, DEFAULT_NUM_PER_PAGE);
-        return {
-            items: data.groups,
-            totalCount: data.totalGroupCount,
-        };
-    };
-
-    onSearchInput = async (searchTerm) => {
-        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, 0, DEFAULT_NUM_PER_PAGE);
-        return {
-            items: data.groups,
-            totalCount: data.totalGroupCount,
-        };
-    };
-
-    onHide = () => {
-        this.props.actions.closeModal(ModalIdentifiers.MANAGE_TEAM_GROUPS);
-    };
-
     render() {
         return (
             <ListModal
                 titleText={`${this.props.team.display_name} Groups`}
                 searchPlaceholderText='Search groups'
-                initialItems={this.initialItems}
                 renderRow={this.renderRow}
-                onPageChange={this.onPageChange}
+                loadItems={this.loadItems}
                 onSearchInput={this.onSearchInput}
                 onHide={this.onHide}
             />

@@ -18,8 +18,7 @@ export default class ListModal extends React.PureComponent {
         searchPlaceholderText: PropTypes.string,
         titleButtonText: PropTypes.string,
         titleButtonOnClick: PropTypes.func,
-        initialItems: PropTypes.func,
-        onPageChange: PropTypes.func,
+        loadItems: PropTypes.func,
         numPerPage: PropTypes.number,
         rangeCountTranslation: PropTypes.func,
         onSearchInput: PropTypes.func,
@@ -64,7 +63,7 @@ export default class ListModal extends React.PureComponent {
     }
 
     async componentDidMount() {
-        const {totalCount, items} = await this.props.initialItems();
+        const {totalCount, items} = await this.props.loadItems(0, '');
         this.setState({totalCount, items, loading: false});
     }
 
@@ -97,14 +96,14 @@ export default class ListModal extends React.PureComponent {
     onNext = async () => {
         this.setState({loading: true});
         const nextPage = this.state.page + 1;
-        const items = await this.props.onPageChange(nextPage);
+        const items = await this.props.loadItems(nextPage, this.state.searchTerm);
         this.setState({page: nextPage, items, loading: false});
     }
 
     onPrev = async () => {
         this.setState({loading: true});
         const prevPage = this.state.page - 1;
-        const items = await this.props.onPageChange(prevPage);
+        const items = await this.props.loadItems(prevPage, this.state.searchTerm);
         this.setState({page: prevPage, items, loading: false});
     }
 
