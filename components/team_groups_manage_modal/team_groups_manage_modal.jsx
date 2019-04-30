@@ -3,7 +3,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, intlShape} from 'react-intl';
 
 import {Groups} from 'mattermost-redux/constants';
 
@@ -24,6 +24,10 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         }).isRequired,
     };
 
+    static contextTypes = {
+        intl: intlShape,
+    };
+
     loadItems = async (pageNumber, searchTerm) => {
         const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, pageNumber, DEFAULT_NUM_PER_PAGE);
         return {
@@ -42,7 +46,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         this.props.actions.closeModal(ModalIdentifiers.MANAGE_TEAM_GROUPS);
     };
 
-    titleButtonOnClick = (event) => {
+    titleButtonOnClick = () => {
         this.onHide();
         this.props.actions.openModal({modalId: ModalIdentifiers.ADD_GROUPS_TO_TEAM, dialogType: AddGroupsToTeamModal});
     };
@@ -89,14 +93,15 @@ export default class TeamGroupsManageModal extends React.PureComponent {
     };
 
     render() {
+        const {formatMessage} = this.context.intl;
         return (
             <ListModal
-                titleText={`${this.props.team.display_name} Groups`}
-                searchPlaceholderText='Search groups'
+                titleText={formatMessage({id: 'manage_team_groups_modal.groups', defaultMessage: '{team} Groups'}, {team: this.props.team.display_name})}
+                searchPlaceholderText={formatMessage({id: 'manage_team_groups_modal.search_placeholder', defaultMessage: 'Search groups'})}
                 renderRow={this.renderRow}
                 loadItems={this.loadItems}
                 onHide={this.onHide}
-                titleButtonText='Add Group'
+                titleButtonText={formatMessage({id: 'group_list_modal.addGroupButton', defaultMessage: 'Add Group'})}
                 titleButtonOnClick={this.titleButtonOnClick}
             />
         );
