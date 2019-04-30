@@ -12,13 +12,13 @@ export const DEFAULT_NUM_PER_PAGE = 50;
 
 export default class ListModal extends React.PureComponent {
     static propTypes = {
+        renderRow: PropTypes.func.isRequired,
+        loadItems: PropTypes.func.isRequired,
         onHide: PropTypes.func,
-        renderRow: PropTypes.func,
         titleText: PropTypes.string,
         searchPlaceholderText: PropTypes.string,
         titleButtonText: PropTypes.string,
         titleButtonOnClick: PropTypes.func,
-        loadItems: PropTypes.func,
         numPerPage: PropTypes.number,
         rangeCountTranslation: PropTypes.func,
     }
