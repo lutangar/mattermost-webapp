@@ -7,6 +7,8 @@ import {FormattedMessage} from 'react-intl';
 
 import {Groups} from 'mattermost-redux/constants';
 
+import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
+
 import {ModalIdentifiers} from 'utils/constants.jsx';
 
 import ListModal, {DEFAULT_NUM_PER_PAGE} from 'components/list_modal.jsx';
@@ -18,6 +20,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
             getGroupsAssociatedToTeam: PropTypes.func.isRequired,
             unlinkGroupSyncable: PropTypes.func.isRequired,
             closeModal: PropTypes.func.isRequired,
+            openModal: PropTypes.func.isRequired,
         }).isRequired,
     };
 
@@ -37,6 +40,11 @@ export default class TeamGroupsManageModal extends React.PureComponent {
 
     onHide = () => {
         this.props.actions.closeModal(ModalIdentifiers.MANAGE_TEAM_GROUPS);
+    };
+
+    titleButtonOnClick = (event) => {
+        this.onHide();
+        this.props.actions.openModal({modalId: ModalIdentifiers.ADD_GROUPS_TO_TEAM, dialogType: AddGroupsToTeamModal});
     };
 
     renderRow = (item, listModal) => {
@@ -88,6 +96,8 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                 renderRow={this.renderRow}
                 loadItems={this.loadItems}
                 onHide={this.onHide}
+                titleButtonText='Add Group'
+                titleButtonOnClick={this.titleButtonOnClick}
             />
         );
     }
