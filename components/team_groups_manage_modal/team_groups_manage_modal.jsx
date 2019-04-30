@@ -29,6 +29,12 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         };
     };
 
+    onClickRemoveGroup = (item, listModal) => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(async () => {
+        listModal.setState({loading: true});
+        const {items} = await listModal.props.onPageChange(listModal.setState.page, listModal.state.searchTerm);
+        listModal.setState({loading: false, items});
+    })
+
     renderRow = (item, listModal) => {
         return (
             <div
@@ -58,11 +64,7 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                         id='removeMember'
                         type='button'
                         className='btn btn-danger btn-message'
-                        onClick={() => this.props.actions.unlinkGroupSyncable(item.id, this.props.team.id, Groups.SYNCABLE_TYPE_TEAM).then(async () => {
-                            listModal.setState({loading: true});
-                            const {items} = await listModal.props.onPageChange(listModal.setState.page, listModal.state.searchTerm);
-                            listModal.setState({loading: false, items});
-                        })}
+                        onClick={() => this.onClickRemoveGroup(item, listModal)}
                     >
                         <FormattedMessage
                             id='group_list_modal.removeGroupButton'
