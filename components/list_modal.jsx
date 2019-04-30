@@ -12,14 +12,71 @@ export const DEFAULT_NUM_PER_PAGE = 50;
 
 export default class ListModal extends React.PureComponent {
     static propTypes = {
-        renderRow: PropTypes.func.isRequired,
+
+        /**
+         * loadItems is a function that receives the params (pageNumber, searchTerm) and should return an object
+         * with the shape {items: [], totalCount: 0}.
+         * items: an array of objects that are passed to each renderRow function.
+         * totalCount: an integer representing the total number of items as displayed in the pagination text.
+         *
+         * Example:
+         *     const loadItems = async (pageNumber, searchTerm) => {
+         *         const {data} = await loadFromServer(searchTerm, pageNumber, PER_PAGE);
+         *         return {
+         *             items: data.users,
+         *             totalCount: data.total,
+         *         };
+         *     };
+         */
         loadItems: PropTypes.func.isRequired,
+
+        /**
+         * renderRow is a function that receives the params (item, listModal) and should return JSX.
+         * item: an object as returned by each entry in the loadItems function's 'items' array.
+         * listModal: the instance of the ListModal component class.
+         *
+         * Example:
+         *     const renderRow = (item, listModal) => <div>{item.id}</div>;
+         */
+        renderRow: PropTypes.func.isRequired,
+
+        /**
+         * onHide (optional) a function to be invoked when the modal is closed.
+         */
         onHide: PropTypes.func,
+
+        /**
+         * titleText (optional) a string to show at the top bar of the modal.
+         */
         titleText: PropTypes.string,
+
+        /**
+         * searchPlaceholderText (optional) a string to show as a placeholder in the search input.
+         */
         searchPlaceholderText: PropTypes.string,
+
+        /**
+         * titleButtonText (optional) a string to show as a text of the title button. If no text is provided
+         * no button will be displayed in the modal.
+         */
         titleButtonText: PropTypes.string,
+
+        /**
+         * titleButtonOnClick (optional) a function to invoke when the title button is clicked. If no function is
+         * provided no button will be displayed in the modal.
+         */
         titleButtonOnClick: PropTypes.func,
+
+        /**
+         * numPerPage (optional) a number setting how many items per page should be displayed. Defaults to
+         * DEFAULT_NUM_PER_PAGE.
+         */
         numPerPage: PropTypes.number,
+
+        /**
+         * numPerPage (optional) a string to use for the paginator range translation. Defaults to the translation used
+         * under the key 'list_modal.paginatorCount'.
+         */
         rangeCountTranslation: PropTypes.func,
     }
 
