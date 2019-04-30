@@ -21,7 +21,6 @@ export default class ListModal extends React.PureComponent {
         loadItems: PropTypes.func,
         numPerPage: PropTypes.number,
         rangeCountTranslation: PropTypes.func,
-        onSearchInput: PropTypes.func,
     }
 
     constructor(props) {
@@ -111,7 +110,7 @@ export default class ListModal extends React.PureComponent {
         const {target} = event;
         const searchTerm = target.value;
         this.setState({loading: true, searchTerm});
-        const result = await this.props.onSearchInput(searchTerm);
+        const result = await this.props.loadItems(0, searchTerm);
         const {items, totalCount} = result;
         this.setState({loading: false, items, totalCount});
     }

@@ -35,14 +35,6 @@ export default class TeamGroupsManageModal extends React.PureComponent {
         listModal.setState({loading: false, items});
     });
 
-    onSearchInput = async (searchTerm) => {
-        const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, 0, DEFAULT_NUM_PER_PAGE);
-        return {
-            items: data.groups,
-            totalCount: data.totalGroupCount,
-        };
-    };
-
     onHide = () => {
         this.props.actions.closeModal(ModalIdentifiers.MANAGE_TEAM_GROUPS);
     };
@@ -95,7 +87,6 @@ export default class TeamGroupsManageModal extends React.PureComponent {
                 searchPlaceholderText='Search groups'
                 renderRow={this.renderRow}
                 loadItems={this.loadItems}
-                onSearchInput={this.onSearchInput}
                 onHide={this.onHide}
             />
         );
